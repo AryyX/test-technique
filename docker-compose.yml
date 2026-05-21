@@ -7,6 +7,9 @@ services:
       - .:/var/www/symfony
     depends_on:
       - mysql
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 
   nginx:
     image: nginx:alpine

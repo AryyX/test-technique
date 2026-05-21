@@ -13,12 +13,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request): Response
+    public function register(Request $request, EntityManagerInterface $em): Response
     {
-        $submitted = $request->query->getBoolean('submitted');
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setStatus('pending');
+            $user->setCreatedAt(new \DateTime());
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('app_register_success');
+        }
 
         return $this->render('registration/register.html.twig', [
-            'submitted' => $submitted,
+            'submitted' => false,
         ]);
     }
     #[Route('/register/success', name: 'app_register_success')]
