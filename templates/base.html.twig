@@ -8,6 +8,20 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% if app.user %}
+            <nav class="navbar navbar-dark bg-danger">
+                <div class="container">
+                    <span class="navbar-brand">FightClubPortal</span>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="text-white">{{ app.user.fighterAlias }}</span>
+                        <a href="{{ path('app_logout') }}" class="btn btn-outline-light btn-sm">
+                            Déconnexion
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        {% endif %}
+
         {% block body %}{% endblock %}
         {{ importmap('app') }}
     </body>

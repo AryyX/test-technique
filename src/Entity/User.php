@@ -253,7 +253,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->validationToken;
     }
 
-    public function setValidationToken(string $validationToken): static
+    public function setValidationToken(?string $validationToken): static
     {
         $this->validationToken = $validationToken;
 
