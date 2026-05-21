@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Portail — FightClubPortal{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h3 class="mb-0">Bienvenue, {{ user.fighterAlias }}</h3>
+                    </div>
+                    <div class="card-body text-center py-5">
+                        <h1 class="display-4">⚠️</h1>
+                        <h2>La première règle du Fight Club</h2>
+                        <p class="lead mt-3">On ne parle pas du Fight Club.</p>
+                        <hr>
+                        <p class="text-muted">ID Combattant : <strong>{{ user.internalId }}</strong></p>
+                        <p class="text-muted">Starter Pokémon : <strong>{{ user.starterPokemon }}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

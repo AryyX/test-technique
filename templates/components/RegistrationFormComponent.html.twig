@@ -6,12 +6,8 @@
     {% else %}
         {{ form_start(form) }}
         <div class="row">
-            <div class="col-md-6 mb-3">
-                {{ form_row(form.firstName) }}
-            </div>
-            <div class="col-md-6 mb-3">
-                {{ form_row(form.lastName) }}
-            </div>
+            <div class="col-md-6 mb-3">{{ form_row(form.firstName) }}</div>
+            <div class="col-md-6 mb-3">{{ form_row(form.lastName) }}</div>
         </div>
         <div class="mb-3">{{ form_row(form.address) }}</div>
         <div class="mb-3">{{ form_row(form.birthDate) }}</div>
@@ -20,11 +16,7 @@
         <div class="mb-3">{{ form_row(form.accreditationNumber) }}</div>
         <div class="mb-3">{{ form_row(form.starterPokemon) }}</div>
         <div class="mb-3">{{ form_row(form.email) }}</div>
-        <button
-            type="button"
-            data-action="live#action"
-            data-live-action-param="save"
-            class="btn btn-danger w-100">
+        <button type="submit" data-action="live#action" data-live-action-param="save" class="btn btn-danger w-100">
             Rejoindre le Fight Club
         </button>
         {{ form_end(form) }}

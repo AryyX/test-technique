@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
@@ -35,7 +36,19 @@ class RegistrationFormType extends AbstractType
             ->add('birthDate', DateType::class, [
                 'label' => 'Date de naissance',
                 'widget' => 'single_text',
-                'constraints' => [new NotBlank()],
+                'required' => false,
+                'invalid_message' => 'Format de date invalide.',
+                'constraints' => [new NotBlank(['message' => 'La date de naissance est obligatoire.'])],
+                'getter' => function(User $user, FormInterface $form): ?string {
+                    return $user->getBirthDate()?->format('Y-m-d');
+                },
+                'setter' => function(User &$user, mixed $value, FormInterface $form): void {
+                    if ($value instanceof \DateTime) {
+                        $user->setBirthDate($value);
+                    } elseif (is_string($value) && $value) {
+                        $user->setBirthDate(new \DateTime($value));
+                    }
+                },
             ])
             ->add('socialSecurityNumber', TextType::class, [
                 'label' => 'Numéro de sécurité sociale',

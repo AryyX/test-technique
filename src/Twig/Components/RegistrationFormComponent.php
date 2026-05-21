@@ -4,14 +4,15 @@ namespace App\Twig\Components;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
+use Symfony\Component\HttpFoundation\Response;
 
 #[AsLiveComponent]
 class RegistrationFormComponent extends AbstractController
@@ -22,12 +23,7 @@ class RegistrationFormComponent extends AbstractController
     #[LiveProp]
     public bool $submitted = false;
 
-    private EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
+    public function __construct(private EntityManagerInterface $em) {}
 
     protected function instantiateForm(): FormInterface
     {
@@ -35,31 +31,21 @@ class RegistrationFormComponent extends AbstractController
     }
 
     #[LiveAction]
-    public function save(): void
+    public function save(): Response
     {
         $this->submitForm();
-
         $form = $this->getForm();
 
         if (!$form->isValid()) {
-            return;
+            return new Response();
         }
 
-        /** @var User $user */
         $user = $form->getData();
         $user->setStatus('pending');
         $user->setCreatedAt(new \DateTime());
-
-        if (!$user->getBirthDate()) {
-            $birthDateString = $form->get('birthDate')->getViewData();
-            if ($birthDateString) {
-                $user->setBirthDate(new \DateTime($birthDateString));
-            }
-        }
-
         $this->em->persist($user);
         $this->em->flush();
 
-        $this->submitted = true;
+        return $this->redirectToRoute('app_register_success');
     }
 }
