@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Enum\UserStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -19,7 +20,7 @@ class UserValidationService
     public function validateUser(User $user): void
     {
         $user->setInternalId($this->generateInternalId());
-        $user->setStatus('validated');
+        $user->setStatus(UserStatus::Validated->value);
         $user->setValidationToken($this->generateToken());
         $user->setTokenExpiresAt(new \DateTime('+24 hours'));
 

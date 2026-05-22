@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Enum\UserStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -41,7 +42,7 @@ class PasswordService
     {
         $hashed = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashed);
-        $user->setStatus('active');
+        $user->setStatus(UserStatus::Active->value);
         $user->setValidationToken(null);
         $user->setTokenExpiresAt(null);
         $this->em->flush();

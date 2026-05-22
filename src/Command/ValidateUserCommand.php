@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Repository\UserRepository;
+use App\Enum\UserStatus;
 use App\Service\UserValidationService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -52,7 +53,7 @@ class ValidateUserCommand extends Command
         $userId = $io->ask('Entrez l\'ID de l\'utilisateur à valider');
         $user = $this->userRepository->find($userId);
 
-        if (!$user || $user->getStatus() !== 'pending') {
+        if (!$user || $user->getStatus() !== UserStatus::Pending->value) {
             $io->error('Utilisateur invalide ou déjà traité.');
             return Command::FAILURE;
         }

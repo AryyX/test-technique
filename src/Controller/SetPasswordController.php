@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
+use App\Enum\UserStatus;
 use App\Service\PasswordService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,7 @@ class SetPasswordController extends AbstractController
     ): Response {
         $user = $userRepository->findOneBy(['validationToken' => $token]);
 
-        if (!$user || $user->getStatus() !== 'validated') {
+        if (!$user || $user->getStatus() !== UserStatus::Validated->value) {
             throw $this->createNotFoundException('Lien invalide ou déjà utilisé.');
         }
 

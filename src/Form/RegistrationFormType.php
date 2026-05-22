@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Enum\StarterPokemon;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -86,9 +87,9 @@ class RegistrationFormType extends AbstractType
             ->add('starterPokemon', ChoiceType::class, [
                 'label' => 'Starter Pokémon',
                 'choices' => [
-                    'Bulbizarre' => 'bulbasaur',
-                    'Carapuce' => 'squirtle',
-                    'Salamèche' => 'charmander',
+                    'Bulbizarre' => StarterPokemon::Bulbasaur->value,
+                    'Carapuce' => StarterPokemon::Squirtle->value,
+                    'Salamèche' => StarterPokemon::Charmander->value,
                 ],
                 'constraints' => [
                     new NotBlank(message: 'Ce champ est obligatoire.'),

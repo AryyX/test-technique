@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Enum\UserStatus;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RegistrationService
@@ -11,7 +12,7 @@ class RegistrationService
 
     public function registerUser(User $user): void
     {
-        $user->setStatus('pending');
+        $user->setStatus(UserStatus::Pending->value);
         $user->setCreatedAt(new \DateTime());
         $this->em->persist($user);
         $this->em->flush();
