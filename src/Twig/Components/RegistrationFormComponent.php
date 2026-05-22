@@ -4,15 +4,15 @@ namespace App\Twig\Components;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Service\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
+use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentWithFormTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\UX\LiveComponent\Attribute\LiveAction;
-use Symfony\Component\HttpFoundation\Response;
 
 #[AsLiveComponent]
 class RegistrationFormComponent extends AbstractController
@@ -23,7 +23,7 @@ class RegistrationFormComponent extends AbstractController
     #[LiveProp]
     public bool $submitted = false;
 
-    public function __construct(private EntityManagerInterface $em) {}
+    public function __construct(private RegistrationService $registrationService) {}
 
     protected function instantiateForm(): FormInterface
     {
@@ -40,11 +40,10 @@ class RegistrationFormComponent extends AbstractController
             return new Response();
         }
 
+        /** @var User $user */
         $user = $form->getData();
-        $user->setStatus('pending');
-        $user->setCreatedAt(new \DateTime());
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->registrationService->registerUser($user);
+        $this->submitted = true;
 
         return $this->redirectToRoute('app_register_success');
     }
