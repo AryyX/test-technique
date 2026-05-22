@@ -1,85 +1,105 @@
-# Test Technique – Développeur Logiciel Full Stack (Symfony & Symfony UX)
+# FightClubPortal
 
-Bienvenue dans le test technique destiné à évaluer votre capacité à concevoir, structurer et développer une application
-full-stack autour des technologies **Symfony** et **Symfony UX**
+Application web secrète permettant aux membres de s'échanger des messages en toute discrétion.
 
----
+## Prérequis
 
-## Contexte du test
+- Docker Desktop
+- Git
 
-Afin d’évaluer votre maîtrise des technologies et de votre approche de développement logiciel, vous êtes invité à
-réaliser un mini-projet complet basé sur un **système d'inscription à un site web et du login après validation**.
+## Installation
 
-Le contenu détaillé du test est disponible dans ce dépôt GitLab, sous la forme d’un fichier Markdown accessible ici :
-[Test technique](test-technique.md)
+### 1. Cloner le projet
 
+```bash
+git clone <url-du-repo>
+cd TestTech
+```
 
----
+### 2. Lancer l'environnement Docker
 
-## Durée du test
+```bash
+docker-compose up -d --build
+```
 
-* **Durée maximale :** 3 jours
-* **Durée recommandée :** environ 1 jours
-* Le test se réalise **en conditions distancielles**, librement et à votre rythme.
+### 3. Installer les dépendances PHP
 
----
+```bash
+docker-compose exec php composer install
+```
 
-##Ressources autorisées
+### 4. Configurer l'environnement
 
-Tous les moyens d’aide et de support sont autorisés :
+Copier le fichier `.env` et adapter si nécessaire :
 
-✔ Documentation officielle
-✔ Moteurs de recherche
-✔ IA (ex : ChatGPT, Copilot, etc.)
-✔ Blogs, articles, tutoriaux
-✔ Librairies publiques
+```bash
+cp .env .env.local
+```
 
-L’objectif n’est pas de tester votre mémoire, mais d'**évaluer votre raisonnement et votre capacité à construire une
-solution en utilisant les bons outils**.
+Les variables importantes :
+- `DATABASE_URL` — connexion MySQL (déjà configurée pour Docker)
+- `MAILER_DSN` — connexion MailHog (déjà configurée pour Docker)
 
----
+### 5. Créer la base de données et exécuter les migrations
 
-## Objectif du test
+```bash
+docker-compose exec php php bin/console doctrine:migrations:migrate
+```
 
-Ce test n’a **pas vocation à être bloquant**, ni à sanctionner l’absence de réalisation d’une partie spécifique.
+### 6. Compiler les assets
 
-Il vise principalement à observer :
+```bash
+docker-compose exec php php bin/console asset-map:compile
+```
 
-* votre capacité à structurer un projet,
-* votre compréhension des concepts OOP, backend et frontend,
-* votre organisation du code,
-* votre logique d’architecture logicielle,
-* l'écriture de tests,
-* votre vision globale d’un projet full-stack.
+## Accès
 
-Vous pouvez choisir de traiter les parties dans l’ordre proposé ou non, en fonction de votre approche personnelle.
+| Service | URL |
+|---|---|
+| Application | http://localhost:8080 |
+| MailHog (emails) | http://localhost:8025 |
 
----
+## Utilisation
 
-## Modalités de développement
+### Flux d'inscription
 
-Vous devrez :
+1. Se rendre sur http://localhost:8080/register
+2. Remplir le formulaire d'inscription
+3. Un administrateur valide l'inscription via la commande CLI
+4. L'utilisateur reçoit un email avec un lien de validation
+5. L'utilisateur crée son mot de passe
+6. L'utilisateur accède au portail
 
-1. **Créer une branche dédiée** pour réaliser le développement.
-   Exemple : `test/nom-prenom`
+### Commande de validation admin
 
-2. **Travailler exclusivement dans cette branche** durant toute la réalisation du test.
+```bash
+docker-compose exec php php bin/console app:validate-user
+```
 
-3. Une fois votre travail finalisé (même partiellement), vous devrez :
+## Tests
 
-   * Mettre à disposition le contenu de la banche via un PR.
+### PHPUnit (tests unitaires et fonctionnels)
 
----
+```bash
+docker-compose exec php php bin/phpunit
+```
 
-## Présentation finale
+### Behat (tests comportementaux)
 
-À l’issue du test, une session d’échange permettra de présenter :
+```bash
+docker-compose exec php vendor/bin/behat
+```
 
-* votre démarche de conception,
-* vos choix techniques et architecturaux,
-* les parties réalisées,
-* une démonstration de l'application (selon son niveau d’avancement),
-* les points que vous souhaiteriez améliorer ou approfondir.
+## Architecture
 
-Cet échange est **aussi l’occasion de discuter ensemble** des bonnes pratiques, de vos préférences techniques et de 
-votre façon de travailler.
+Voir `docs/architecture.md`
+
+## Stack technique
+
+- **PHP 8.2** avec Symfony 7.4
+- **MySQL 8.0**
+- **Nginx**
+- **MailHog** (emails en développement)
+- **Symfony UX** (Live Components, Twig Components)
+- **Bootstrap 5**
+- **PHPUnit** + **Behat**
