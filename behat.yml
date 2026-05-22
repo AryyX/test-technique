@@ -1,0 +1,17 @@
+default:
+    suites:
+        default:
+            contexts:
+                - App\Tests\Behat\RegistrationContext
+
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            bootstrap: config/bootstrap.php
+            kernel:
+                environment: test
+                debug: true
+        Behat\MinkExtension:
+            base_url: http://nginx:80
+            sessions:
+                default:
+                    symfony: ~
