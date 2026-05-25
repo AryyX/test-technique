@@ -51,9 +51,9 @@ class UserValidationService
             ->to($user->getEmail())
             ->subject('Votre inscription au FightClubPortal a été validée')
             ->html(
-                '<h1>Bienvenue ' . $user->getFighterAlias() . '</h1>' .
+                '<h1>Bienvenue ' . htmlspecialchars($user->getFighterAlias(), ENT_QUOTES, 'UTF-8') . '</h1>' .
                 '<p>Votre inscription a été validée. Cliquez sur le lien ci-dessous pour créer votre mot de passe :</p>' .
-                '<a href="' . $link . '">Créer mon mot de passe</a>' .
+                '<a href="' . htmlspecialchars($link, ENT_QUOTES, 'UTF-8') . '">Créer mon mot de passe</a>' .
                 '<p>Ce lien expire dans 24 heures.</p>'
             );
 

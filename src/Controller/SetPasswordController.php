@@ -33,14 +33,14 @@ class SetPasswordController extends AbstractController
         $error = null;
 
         if ($request->isMethod('POST')) {
-            $password = $request->request->get('password');
-            $confirm = $request->request->get('confirm');
+            $password = $request->request->get('password') ?? '';
+            $confirm = $request->request->get('confirm') ?? '';
 
             $error = $this->passwordService->getPasswordError($password, $confirm);
 
             if ($error === null) {
                 $this->passwordService->setPassword($user, $password);
-                return $this->redirectToRoute('app_portal');
+                return $this->redirectToRoute('app_login');
             }
         }
 

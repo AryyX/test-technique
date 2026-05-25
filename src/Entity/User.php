@@ -193,7 +193,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->birthDate;
     }
 
-    public function setBirthDate(\DateTime $birthDate): static
+    public function setBirthDate(?\DateTime $birthDate): static
     {
         $this->birthDate = $birthDate;
 

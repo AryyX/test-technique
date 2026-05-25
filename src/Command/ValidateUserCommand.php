@@ -28,7 +28,7 @@ class ValidateUserCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $pendingUsers = $this->userRepository->findBy(['status' => 'pending']);
+        $pendingUsers = $this->userRepository->findBy(['status' => UserStatus::Pending->value]);
 
         if (empty($pendingUsers)) {
             $io->info('Aucun utilisateur en attente de validation.');
