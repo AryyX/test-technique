@@ -58,7 +58,10 @@ class ValidateUserCommand extends Command
             return Command::FAILURE;
         }
 
-        $io->confirm('Valider ' . $user->getFighterAlias() . ' ?', true);
+        if (!$io->confirm('Valider ' . $user->getFighterAlias() . ' ?', false)) {
+            $io->warning('Validation annulée.');
+            return Command::SUCCESS;
+        }
 
         $this->validationService->validateUser($user);
 

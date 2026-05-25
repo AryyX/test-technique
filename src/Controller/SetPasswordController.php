@@ -44,7 +44,7 @@ class SetPasswordController extends AbstractController
             }
         }
 
-        return $this->render('set_password/index.html.twig', [
+        return $this->render('set_password/set_password.html.twig', [
             'error' => $error,
             'token' => $token,
         ]);

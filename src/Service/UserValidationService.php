@@ -30,7 +30,7 @@ class UserValidationService
 
     private function generateInternalId(): string
     {
-        return 'FC-' . strtoupper(substr(md5(uniqid()), 0, 8));
+        return 'FC-' . strtoupper(bin2hex(random_bytes(4)));
     }
 
     private function generateToken(): string
